@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "D:\\stm32test\\STM32_Demo\\FreeRTOS\\include",
+                "D:\\stm32test\\STM32_Demo\\FreeRTOS\\port\\RVDS\\ARM_CM3",
+                "D:\\stm32test\\STM32_Demo\\Libraries\\CMSIS",
+                "D:\\stm32test\\STM32_Demo\\Libraries\\STM32F10x_StdPeriph_Driver\\inc",
+                "D:\\stm32test\\STM32_Demo\\User"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE",
+                "STM32F10x_HD",
+                "USE_STDPERIPH_DRIVER"
+            ],
+            "compilerPath": "C:\\Program Files (x86)\\GNU Arm Embedded Toolchain\\9 2020-q2-update\\bin\\arm-none-eabi-gcc.exe",
+            "cStandard": "c11",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}
