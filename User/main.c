@@ -30,6 +30,7 @@
 #include "task.h"
 #include "../User/bsp/led/bsp_led.h"
 #include "../User/bsp/usart/bsp_usart.h"
+#include "../User/bsp/lcd/bsp_lcd.h"
 
 /*************************** 任务句柄 ****************************************/
 /*
@@ -40,7 +41,7 @@
 /* 创建任务句柄 */
 static TaskHandle_t AppTaskCreate_Handle;
 /* LED 任务句柄 */
-static TaskHandle_t LED_Task_Handle;
+static TaskHandle_t LCD_Task_Handle;
 
 /*************************** 内核对象句柄 ************************************/
 /*
@@ -61,12 +62,12 @@ static TaskHandle_t LED_Task_Handle;
 /* AppTaskCreate 任务堆栈 */
 static StackType_t AppTaskCreate_Stack[128];
 /* LED 任务堆栈 */
-static StackType_t LED_Task_Stack[128];
+static StackType_t LCD_Task_Stack[128];
 
 /* AppTaskCreate 任务控制块 */
 static StaticTask_t AppTaskCreate_TCB;
 /* AppTaskCreate 任务控制块 */
-static StaticTask_t LED_Task_TCB;
+static StaticTask_t LCD_Task_TCB;
 
 /* 空闲任务堆栈 */
 static StackType_t Idle_Task_Stack[configMINIMAL_STACK_SIZE];
@@ -84,7 +85,7 @@ static StaticTask_t Timer_Task_TCB;
 ******************************************************************************
 */
 static void AppTaskCreate(void);  /* 用于创建任务 */
-static void LED_Task(void* pvParameters);  /* LED_Task 任务实现 */
+static void LCD_Task(void* pvParameters);  /* LED_Task 任务实现 */
 static void BSP_Init(void);  /* 用于初始化板载相关资源 */
 
 /*
@@ -137,18 +138,18 @@ static void AppTaskCreate(void)
   taskENTER_CRITICAL();            //进入临界区
   
   /* 创建 LED_Task 任务 */
-  LED_Task_Handle = xTaskCreateStatic((TaskFunction_t)LED_Task,    //任务函数
-                                      (const char *)"LED Task",    //任务名称
-                                      (uint32_t)128,               //任务栈大小
-                                      (void *)NULL,                //传递给任务函数的参数
-                                      (UBaseType_t)4,              //任务优先级
-                                      (StackType_t *)LED_Task_Stack,//任务堆栈
-                                      (StaticTask_t *)&LED_Task_TCB); //任务控制块
+  LCD_Task_Handle = xTaskCreateStatic((TaskFunction_t)LCD_Task,       //任务函数
+                                      (const char *)"LCD Task",       //任务名称
+                                      (uint32_t)128,                  //任务栈大小
+                                      (void *)NULL,                   //传递给任务函数的参数
+                                      (UBaseType_t)4,                 //任务优先级
+                                      (StackType_t *)LCD_Task_Stack,  //任务堆栈
+                                      (StaticTask_t *)&LCD_Task_TCB); //任务控制块
   
-  if(NULL != LED_Task_Handle)  /* 创建成功 */
-    printf("LED_Task 任务创建成功！\n");
+  if(NULL != LCD_Task_Handle)  /* 创建成功 */
+    printf("LCD_Task 任务创建成功！\n");
   else
-    printf("LED_Task 任务创建失败！\n");
+    printf("LCD_Task 任务创建失败！\n");
 
   vTaskDelete(AppTaskCreate_Handle);  //删除 AppTaskCreate 任务
   taskEXIT_CRITICAL();                //退出临界区
@@ -160,7 +161,7 @@ static void AppTaskCreate(void)
  * @retval 无
  * @note   无
  *************************************************************************/
-static void LED_Task(void *parameter)
+static void LCD_Task(void *parameter)
 {
   while(1){
     LED0_ON;
@@ -172,6 +173,30 @@ static void LED_Task(void *parameter)
     printf("led0_task running, LED0_OFF\r\n");
   }
 }
+
+/**************************************************************************
+ * @brief  LCD_Task 任务主体
+ * @param  无
+ * @retval 无
+ * @note   无
+ *************************************************************************/
+// static void LCD_Task(void *parameter)
+// {
+//   uint32_t i=0;
+//   POINT_COLOR = RED;
+//   LCD_ShowString(20,150,220,24,24,"The first blood !");
+//   vTaskDelay(2000);
+//   LCD_Fill(20,150,20+220,150+24,BLUE);
+//   while(1)
+//   {
+//     LED0_TOGGLE;
+//     for(i=100;i>0;i--){
+//       LCD_ShowString(20,i*3,220,24,24,"STM32 LCD Test !"); //显示字符串
+//       vTaskDelay(2000);
+//       LCD_Fill(20,i*3,20+220,i*3+24,BLUE);
+//     }
+//   }
+// }
 
 // /**************************************************************************
 //  * @brief  LED1_Task 任务主体
@@ -212,6 +237,9 @@ static void BSP_Init(void)
 
   /* 串口初始化 */
   USART_Config();
+
+  /* FSMCS驱动LCD屏幕初始化 */
+  LCD_Init();
 }
 
 /******************************************************************

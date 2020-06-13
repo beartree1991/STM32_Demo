@@ -41,3 +41,5 @@
 ..\output\main.o: ..\FreeRTOS\include\task.h
 ..\output\main.o: ..\FreeRTOS\include\list.h
 ..\output\main.o: ..\User\../User/bsp/led/bsp_led.h
+..\output\main.o: ..\User\../User/bsp/lcd/bsp_lcd.h
+..\output\main.o: ..\User\../User/bsp/sys/sys.h

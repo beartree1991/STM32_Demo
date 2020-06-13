@@ -1,6 +1,6 @@
 /* -----------------------------包含的头文件 ---------------------------------*/
 
-#include "../User/bsp/lcd/bsc_lcd.h"
+#include "../User/bsp/lcd/bsp_lcd.h"
 #include "../User/bsp/usart/bsp_usart.h"	 
 #include "../User/bsp/delay/delay.h"
 #include "../User/bsp/lcd/font.h"
@@ -359,14 +359,14 @@ void LCD_Init(void)
 		
  
 	delay_ms(50); 					// delay 50 ms 
-  lcddev.id=LCD_ReadReg(0x0000);	//读ID（9320/9325/9328/4531/4535等IC）   
-  if(lcddev.id<0XFF||lcddev.id==0XFFFF||lcddev.id==0X9300)//读到ID不正确,新增lcddev.id==0X9300判断，因为9341在未被复位的情况下会被读成9300
+  	lcddev.id=LCD_ReadReg(0x0000);	//读ID（9320/9325/9328/4531/4535等IC）   
+  	if(lcddev.id<0XFF||lcddev.id==0XFFFF||lcddev.id==0X9300)//读到ID不正确,新增lcddev.id==0X9300判断，因为9341在未被复位的情况下会被读成9300
 	{	
  		//尝试9341 ID的读取
 		LCD_WR_REG(0XD3);
 		lcddev.id=LCD_RD_DATA();	//dummy read 	
  		lcddev.id=LCD_RD_DATA();	//读到0X00
-  	lcddev.id=LCD_RD_DATA();   	//读取93								   
+  		lcddev.id=LCD_RD_DATA();   	//读取93								   
  		lcddev.id<<=8;
 		lcddev.id|=LCD_RD_DATA();  	//读取41 	   			   		
 	} 
@@ -477,7 +477,7 @@ void LCD_Clear(u16 color)
 	u32 index=0;      
 	u32 totalpoint=lcddev.width;
 	totalpoint *= lcddev.height; 			//得到总点数
-  LCD_SetCursor(0x00,0x0000);	//设置光标位置 
+  	LCD_SetCursor(0x00,0x0000);	//设置光标位置 
 	LCD_WriteRAM_Prepare();     		//开始写入GRAM	 	  
 	for(index=0;index<totalpoint;index++)
 	{
@@ -598,7 +598,7 @@ void LCD_Draw_Circle(u16 x0,u16 y0,u8 r)
 //mode:叠加方式(1)还是非叠加方式(0)
 void LCD_ShowChar(u16 x,u16 y,u8 num,u8 size,u8 mode)
 {  							  
-  u8 temp,t1,t;
+  	u8 temp,t1,t;
 	const u8 * p;
 	u16 y0=y;
 	u8 csize=(size/8+((size%8)?1:0))*(size/2);		//得到字体一个字符对应点阵集所占的字节数	
